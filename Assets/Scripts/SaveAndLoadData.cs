@@ -22,11 +22,7 @@ public static class SaveAndLoadData
         bf.Serialize(saveFile, datas);
 
         saveFile.Close();
-
-        if (AuthManager.Instance.IsSignedIn)
-        {
-            AuthManager.Instance.SaveDataToCloud();
-        }
+       
     }
 
 

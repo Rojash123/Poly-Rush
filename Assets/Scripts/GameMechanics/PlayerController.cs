@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
     public MeshRenderer ballSkin;
     public TrailRenderer trailSkin;
 
+    private const string leaderboard_top_score_leaderboard = "CgkIpYyxrb4UEAIQAQ";
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -126,9 +128,23 @@ public class PlayerController : MonoBehaviour
         if (score > GameLoadState.highScore)
         {
             GameLoadState.highScore = score;
+            SaveAndLoadData.Save();
+
+            if (AuthManager.Instance.IsSignedIn)
+            {
+                Social.ReportScore((long)score, leaderboard_top_score_leaderboard, LeaderBoardUpdate);
+            }
         }
-        SaveAndLoadData.Save();
     }
+
+    private void LeaderBoardUpdate(bool isSuccess)
+    {
+        if (isSuccess)
+        {
+            Debug.Log("Leaderboard Updated");
+        }
+    }
+
     private void OnCoinConsumed()
     {
         thisRunCoinValue++;
