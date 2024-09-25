@@ -1,117 +1,57 @@
-using System.Collections.Generic;
 using UnityEngine;
-using Unity.Services.Authentication;
-using System.Threading.Tasks;
-using Unity.Services.Core;
-using Unity.Services.CloudSave;
-using System;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms.Impl;
 public class AuthManager : MonoBehaviour
 {
     bool isSignedIn;
     public bool IsSignedIn { get { return isSignedIn; } }
     public static AuthManager Instance;
-
-    const string signInStatus = "isSignedOnce";
+    public string name, id, imageUrl;
 
     async void Start()
     {
-        SaveAndLoadData.Load();
+        SignInGooglePlay();
+        PlayGamesPlatform.Activate();
         Instance = this;
-        //await UnityServices.InitializeAsync();
-        //isSignedIn = false;
-        //SignIn();
     }
-    async void SignIn()
+
+
+    public void ShowLeaderBoard()
     {
-        await SignInAnonymous();
-    }
-    async Task SignInAnonymous()
-    {
-        if (!AuthenticationService.Instance.SessionTokenExists)
+        if (IsSignedIn)
         {
-            return;
+            Social.ShowLeaderboardUI();
         }
-        try
+        else
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            string name = AuthenticationService.Instance.PlayerName;
+            SignInGooglePlay();
+        }
+    }
+
+    public void SignInGooglePlay()
+    {
+        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+    }
+    internal void ProcessAuthentication(SignInStatus status)
+    {
+        if (status == SignInStatus.Success)
+        {
             isSignedIn = true;
-            if (!PlayerPrefs.HasKey(signInStatus))
-            {
-                GetDataFromCloud();
-            }
-            Debug.Log("signed in successfully");
-
-        }
-        catch (AuthenticationException ex)
-        {
             SaveAndLoadData.Load();
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            SaveAndLoadData.Load();
-            Debug.LogException(ex);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogException(ex);
-        }
-    }
-    public async void SaveDataToCloud()
-    {
-        var data = new Dictionary<string, object>() { { "coin", GameLoadState.coinAmt }, { "score", GameLoadState.highScore } };
-        await CloudSaveService.Instance.Data.Player.SaveAsync(data);
-    }
-    async void GetDataFromCloud()
-    {
-        var serverData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { "coin", "score" });
-        int coinTemp = 0; float scoreTemp = 0;
-        bool isPlayerPresent = false;
+            Social.ReportScore((long)GameLoadState.highScore, "CgkIpYyxrb4UEAIQAQ", null);
+            string name = PlayGamesPlatform.Instance.GetUserDisplayName();
+            string id = PlayGamesPlatform.Instance.GetUserId();
+            string imageUrl = PlayGamesPlatform.Instance.GetUserImageUrl();
 
-        if (serverData.TryGetValue("coin", out var coin))
-        {
-            coinTemp = coin.Value.GetAs<int>();
-            isPlayerPresent = true;
+            // Continue with Play Games Services
         }
-        if (serverData.TryGetValue("score", out var score))
+        else
         {
-            score.Value.GetAs<float>();
-            scoreTemp = score.Value.GetAs<float>();
-        }
-        if (isPlayerPresent)
-        {
-            if (SaveAndLoadData.isFilePresent)
-            {
-                Debug.Log("case1");
-                GameLoadState.coinAmt = coinTemp;
-                GameLoadState.highScore = scoreTemp;
-                SaveAndLoadData.Save();
-            }
-            else
-            {
-                Debug.Log("case2");
-                SaveAndLoadData.CreateFile(coinTemp, scoreTemp);
-            }
-            PlayerPrefs.SetInt(signInStatus, 1);
-        }
-        if (!isPlayerPresent)
-        {
-            if (SaveAndLoadData.isFilePresent)
-            {
-                Debug.Log("case3");
-                SaveAndLoadData.Load();
-                SaveDataToCloud();
-            }
-            else
-            {
-                Debug.Log("case4");
-                GameLoadState.coinAmt = 100;
-                GameLoadState.highScore = 0;
-                SaveAndLoadData.CreateFile(100, 0);
-                SaveDataToCloud();
-            }
-            PlayerPrefs.SetInt(signInStatus, 1);
+            isSignedIn = false;
+            // Disable your integration with Play Games Services or show a login button
+            // to ask users to sign-in. Clicking it should call
+            // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
         }
     }
 

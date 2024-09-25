@@ -169,6 +169,10 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    public void OpenLeaderBoard()
+    {
+        AuthManager.Instance.ShowLeaderBoard();
+    }
 
     public void NoConfirmMenu()
     {
@@ -259,9 +263,13 @@ public class UIManager : MonoBehaviour
     }
     public void ShowAdAStore()
     {
-
         AdManager.Instance.ShowRewardedAStore();
         SoundManager.Instance.UIClickSound();
+    }
+
+    public void ShowLeaderBoard()
+    {
+
     }
     #endregion
     #region HandleSound;
@@ -327,5 +335,6 @@ public class UIManager : MonoBehaviour
         vibtrateOffButton.SetActive(true);
 
     }
+
     #endregion;
 }
