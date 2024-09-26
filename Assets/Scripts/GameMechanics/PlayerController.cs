@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
         if (score > GameLoadState.highScore)
         {
             GameLoadState.highScore = score;
-            SaveAndLoadData.Save();
+            SaveAndLoadData.SaveData();
 
             if (AuthManager.Instance.IsSignedIn)
             {
@@ -167,6 +167,7 @@ public class PlayerController : MonoBehaviour
     }
     private void StartTouchPrimary(InputAction.CallbackContext ctx)
     {
+        Debug.Log("This is working");
         if (!isSwipeAllowed) return;
         isSwipePerformed = false;
         canSwipe = true;
