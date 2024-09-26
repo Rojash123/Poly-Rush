@@ -222,7 +222,7 @@ public class AdManager : MonoBehaviour
             rewardedAd.Show((Reward reward) =>
             {
                 GameLoadState.coinAmt += 50;
-                SaveAndLoadData.Save();
+                SaveAndLoadData.SaveData();
             });
         }
         else

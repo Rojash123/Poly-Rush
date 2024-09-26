@@ -1,7 +1,9 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Unity.Services.CloudSave;
 using UnityEngine;
 
 public class SkinManager : MonoBehaviour
@@ -10,10 +12,36 @@ public class SkinManager : MonoBehaviour
     public List<GameSkinComponents> skinComponents;
     public SkinData skinData;
 
-    string fileName = "Hmm";
     private List<int> unlockedData = new List<int>();
     private int selectedData = 0;
 
+    private string skinSaveFile = "SkinCollection";
+
+    public async void LoadFileDatas()
+    {
+        var coinData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>
+        {
+          skinSaveFile
+        });
+
+        if (coinData.ContainsKey(skinSaveFile))
+        {
+            string response = coinData[skinSaveFile].Value.GetAs<string>();
+            var data = JsonConvert.DeserializeObject<SkinData>(response);
+            foreach (char c in data.UnlockedStateData)
+            {
+                unlockedData.Add(c - '0');
+            }
+            selectedData = data.selectedSkinIndex;
+        }
+        else
+        {
+            unlockedData.Clear();
+            selectedData = 0;
+            SaveData("0", 0);
+        }
+        AllSkinStateHandler();
+    }
 
     private void Start()
     {
@@ -23,35 +51,9 @@ public class SkinManager : MonoBehaviour
             skinComponent.OnItemPurchasedEvent += BuySkin;
             skinComponent.onItemSelectedEvent += SelectSkin;
         }
-        LoadDataFromSaveFile();
+        LoadFileDatas();
     }
-    void LoadDataFromSaveFile()
-    {
-        if (File.Exists(Path.Combine(Application.persistentDataPath, fileName)))
-        {
-            string destination = Path.Combine(Application.persistentDataPath, fileName);
-            FileStream file;
-            file = File.OpenRead(destination);
-
-            BinaryFormatter bf = new BinaryFormatter();
-            var data = (SkinData)bf.Deserialize(file);
-            file.Close();
-
-
-            foreach (char c in data.UnlockedStateData)
-            {
-                unlockedData.Add(c - '0');
-            }
-            selectedData = data.selectedSkinIndex;
-        }
-        else
-        {
-            SaveData("0", 0);
-            unlockedData.Add(0);
-            selectedData = 0;
-        }
-        AllSkinStateHandler();
-    }
+   
     void AllSkinStateHandler()
     {
         foreach (var item in skinComponents)
@@ -64,18 +66,12 @@ public class SkinManager : MonoBehaviour
         }
         skinComponents[selectedData].SelectedState();
     }
-    void SaveData(string unlockedSkin, int selectedData)
+    async void SaveData(string unlockedSkin, int selectedData)
     {
-        string destination = Path.Combine(Application.persistentDataPath, fileName);
-        FileStream file;
-
-        if (File.Exists(destination)) file = File.OpenWrite(destination);
-        else file = File.Create(destination);
-
-        var data = new SkinData(unlockedSkin, selectedData);
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, data);
-        file.Close();
+        var currentData = new SkinData(unlockedSkin, selectedData);
+        var serializedData = JsonConvert.SerializeObject(currentData);
+        var data = new Dictionary<string, object> { { skinSaveFile, serializedData } };
+        await CloudSaveService.Instance.Data.Player.SaveAsync(data);
     }
     private void OnDestroy()
     {

@@ -1,70 +1,40 @@
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using Unity.Services.CloudSave;
 using UnityEngine;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
-public static class SaveAndLoadData
+public class SaveAndLoadData:MonoBehaviour
 {
-    private static string file = "State";
-    private static string directoryName = "Hello";
-    public static void Save()
+    private static string saveData="saveData";
+
+    public static async void SaveData()
     {
-        string path =Path.Combine(Application.persistentDataPath, directoryName);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream saveFile = File.Create(path);
-
-        Data datas = new Data();
-
-        datas.coin = GameLoadState.coinAmt;
-        datas.highScore = GameLoadState.highScore;
-
-        bf.Serialize(saveFile, datas);
-
-        saveFile.Close();
-       
+        var currentData = new Data(GameLoadState.coinAmt, GameLoadState.highScore);
+        var serializedData= JsonConvert.SerializeObject(currentData);
+        var data = new Dictionary<string, object> { { saveData, serializedData } };
+        await CloudSaveService.Instance.Data.Player.SaveAsync(data);
     }
-
-
-    public static bool isFilePresent { get { return File.Exists(Path.Combine(Application.persistentDataPath, directoryName)); } }
-    public static void Load()
+    public static async void LoadFileDatas()
     {
-        if (isFilePresent)
+        var coinData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> 
         {
-            LoadFileDatas();
+          saveData
+        });
+
+        if (coinData.ContainsKey(saveData))
+        {
+            string response = coinData[saveData].Value.GetAs<string>();
+            var data=JsonConvert.DeserializeObject<Data>(response);
+            GameLoadState.coinAmt = data.coin;
+            GameLoadState.highScore = data.highScore;
         }
         else
         {
-            CreateFile(100, 0);
+            GameLoadState.coinAmt=100;
+            GameLoadState.highScore=0;
+            SaveData();
         }
-
-    }
-    static void LoadFileDatas()
-    {
-        string path = Path.Combine(Application.persistentDataPath, directoryName);
-        Debug.Log(path);
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream saveFile = File.Open(path, FileMode.Open);
-        Data gameDatas = (Data)bf.Deserialize(saveFile);
-
-        GameLoadState.coinAmt = gameDatas.coin;
-        GameLoadState.highScore = gameDatas.highScore;
-
-        saveFile.Close();
-    }
-    public static void CreateFile(int coin, float data)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-
-        string path = Path.Combine(Application.persistentDataPath, directoryName);
-        FileStream saveFile = File.Create(path);
-        Data datas = new Data();
-
-        datas.coin = coin;
-        datas.highScore = data;
-        bf.Serialize(saveFile, datas);
-
-        saveFile.Close();
     }
 }
 [Serializable]
@@ -72,5 +42,10 @@ public struct Data
 {
     public int coin;
     public float highScore;
-    public int menuAdCount;
+
+    public Data(int coin,float highScore)
+    {
+        this.coin = coin;
+        this.highScore = highScore;
+    }
 }
