@@ -10,6 +10,8 @@ public class SaveAndLoadData:MonoBehaviour
 
     public static async void SaveData()
     {
+        if (!AuthManager.Instance.IsSignedIn) return;
+
         var currentData = new Data(GameLoadState.coinAmt, GameLoadState.highScore);
         var serializedData= JsonConvert.SerializeObject(currentData);
         var data = new Dictionary<string, object> { { saveData, serializedData } };
@@ -17,6 +19,8 @@ public class SaveAndLoadData:MonoBehaviour
     }
     public static async void LoadFileDatas()
     {
+        if (!AuthManager.Instance.IsSignedIn) return;
+
         var coinData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> 
         {
           saveData
