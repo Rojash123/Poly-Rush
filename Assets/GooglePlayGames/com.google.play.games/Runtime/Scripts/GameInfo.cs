@@ -38,7 +38,7 @@ namespace GooglePlayGames {
 
         public const string ApplicationId = "703932941861"; // Filled in automatically
         public const string IosClientId = "__IOS_CLIENTID__"; // Filled in automatically
-        public const string WebClientId = "703932941861-2jgntgnu27mtt8tko9fabuvlnghk3c09.apps.googleusercontent.com"; // Filled in automatically
+        public const string WebClientId = "703932941861-qgrak3807v07gvee4e5eea1ebiauv8k7.apps.googleusercontent.com"; // Filled in automatically
         public const string NearbyConnectionServiceId = "com.Gamebyme.PolyRush3d";
 
         public static bool ApplicationIdInitialized() {

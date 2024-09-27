@@ -2,7 +2,10 @@ using GoogleMobileAds.Api;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class AdManager : MonoBehaviour
@@ -187,18 +190,15 @@ public class AdManager : MonoBehaviour
             });
         }
     }
-    public GameObject loadingAd,PleaseCheckInternetConnection;
+    public GameObject loadingAd, PleaseCheckInternetConnection;
     public void ShowRewardedAdLevelUnlock()
     {
-        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
+        while (!rewardedAd.CanShowAd())
         {
-            while (!rewardedAd.CanShowAd())
-            {
-                loadingAd.SetActive(true);
-            }
-            loadingAd.SetActive(false);
+            loadingAd.SetActive(true);
         }
-       
+        loadingAd.SetActive(false);
+
         if (rewardedAd != null && rewardedAd.CanShowAd())
         {
             rewardedAd.Show((Reward reward) =>
@@ -210,7 +210,6 @@ public class AdManager : MonoBehaviour
         }
         else
         {
-            PleaseCheckInternetConnection.SetActive(true);
             return;
         }
     }
@@ -224,10 +223,6 @@ public class AdManager : MonoBehaviour
                 GameLoadState.coinAmt += 50;
                 SaveAndLoadData.SaveData();
             });
-        }
-        else
-        {
-            PleaseCheckInternetConnection.SetActive(true);
         }
     }
 

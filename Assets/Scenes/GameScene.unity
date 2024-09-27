@@ -14314,6 +14314,9 @@ MonoBehaviour:
   overLayPanel: {fileID: 7404163613137633851}
   loadingPanel: {fileID: 5605602697330104320}
   countDownPanel: {fileID: 2098065589541308428}
+  avatarImage: {fileID: 8112861071069763658}
+  userName: {fileID: 4377196562973607852}
+  scoreAvatar: {fileID: 7457273390084366236}
   currentMiniPanel: {fileID: 9184696340999088226}
   currentInfoPage: {fileID: 5142004861145791378}
   closeButton: {fileID: 1423483042200450874}
@@ -16342,7 +16345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -529021, y: 0}
+  m_AnchoredPosition: {x: -582198.44, y: 0}
   m_SizeDelta: {x: 689.5532, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5084218654846638374

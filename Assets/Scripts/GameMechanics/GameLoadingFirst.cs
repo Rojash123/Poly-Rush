@@ -56,6 +56,8 @@ public class GameLoadingFirst : MonoBehaviour
             loadingSlider.value = sliderValue;
             yield return new WaitForSeconds(0.01f);
         }
+        AuthManager.Instance.SubScribeEvents();
+        yield return new WaitUntil(() => AuthManager.Instance.IsSignedIn);
         selectLevelScreen.SetActive(true);
         loadingPanel.SetActive(false);
     }

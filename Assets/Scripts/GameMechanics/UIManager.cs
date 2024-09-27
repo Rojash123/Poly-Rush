@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +24,9 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI score, thisCoinAmount, menuScore, menuCoin, gameOverCoin, gameOverScore, countDownText,highScoreText;
     public GameObject mainMenuPanel, overLayPanel, loadingPanel, countDownPanel;
+
+    public Image avatarImage;
+    public TextMeshProUGUI userName,scoreAvatar;
 
     #region MainMenu
     public void StartGame()
@@ -52,6 +54,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject currentMiniPanel, currentInfoPage;
     private void Start()
     {
+        UIManager.Instance.menuScore.text = GameLoadState.highScore.ToString("f2");
+        avatarImage.sprite = AuthManager.Instance.avatar;
         currentPanel = null;
         CheckPlayerPrefsSound();
         watchAdCount = 0;
@@ -80,6 +84,12 @@ public class UIManager : MonoBehaviour
         highScoreText.text = GameLoadState.highScore.ToString("f2");
         SoundManager.Instance.UIClickSound();
         currentPanel = temp;
+
+        if(temp.name== "AvatarPanel")
+        {
+            userName.text = AuthManager.Instance.name;
+            scoreAvatar.text = GameLoadState.highScore.ToString("f2");
+        }
         LeanTween.scale(currentPanel, Vector3.one, tweenTime).setEaseOutBack();
         closeButton.gameObject.SetActive(true);
         behindCloseButton.gameObject.SetActive(true);
