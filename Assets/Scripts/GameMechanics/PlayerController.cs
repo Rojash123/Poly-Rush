@@ -126,12 +126,11 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.gameOverCoin.text = thisRunCoinValue.ToString();
         GameLoadState.coinAmt += thisRunCoinValue;
 
-        Debug.Log("this is currentscore" + score);
-        Debug.Log("This is highscore" + GameLoadState.highScore);
+        
         if (score >= GameLoadState.highScore)
         {
             GameLoadState.highScore = score;
-            Social.ReportScore((long)score, leaderboard_top_score_leaderboard, LeaderBoardUpdate);
+            Social.ReportScore((long)score*100, leaderboard_top_score_leaderboard, LeaderBoardUpdate);
         }
         SaveAndLoadData.SaveData();
     }
