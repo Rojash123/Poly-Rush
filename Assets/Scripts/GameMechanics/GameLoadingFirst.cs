@@ -38,7 +38,14 @@ public class GameLoadingFirst : MonoBehaviour
             SetDynamicText();
         }
         sliderValue = 0;
-        StartCoroutine(LoadSceneSlider());
+        if(!(Application.internetReachability == NetworkReachability.NotReachable))
+        {
+            StartCoroutine(LoadSceneSlider());
+        }
+        else
+        {
+            AdManager.Instance.PleaseCheckInternetConnection.SetActive(true);
+        }
     }
     public void SetDynamicText()
     {
@@ -50,14 +57,17 @@ public class GameLoadingFirst : MonoBehaviour
     }
     IEnumerator LoadSceneSlider()
     {
+        Debug.Log("Hello");
         while (sliderValue < 100)
         {
             sliderValue++;
             loadingSlider.value = sliderValue;
             yield return new WaitForSeconds(0.01f);
         }
-        AuthManager.Instance.SubScribeEvents();
-        yield return new WaitUntil(() => AuthManager.Instance.IsSignedIn);
+        if (!AuthManager.Instance.isSubscribed)
+        {
+            AuthManager.Instance.SubScribeEvents();
+        }
         selectLevelScreen.SetActive(true);
         loadingPanel.SetActive(false);
     }
