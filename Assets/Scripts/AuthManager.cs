@@ -5,14 +5,14 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using System.Threading.Tasks;
 using System;
-using TMPro;
-using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using System.Collections;
 
 public class AuthManager : MonoBehaviour
 {
     bool isSignedIn;
+
+    public bool isSubscribed;
     public bool IsSignedIn { get { return isSignedIn; } }
     public static AuthManager Instance;
     public string name, id, imageUrl;
@@ -22,13 +22,22 @@ public class AuthManager : MonoBehaviour
 
     void Start()
     {
-        PlayGamesPlatform.Activate();
-        SignInGooglePlay();
+        isInternetAvailable = !(Application.internetReachability == NetworkReachability.NotReachable);
+        if (isInternetAvailable)
+        {
+            SignInGooglePlay();
+        }
+        else
+        {
+            AuthManager_onInternetConnectionLost();
+        }
     }
     public void SubScribeEvents()
     {
         onInternetConnectionRestored += AuthManager_onInternetConnectionRestored;
         onInternetConnectionLost += AuthManager_onInternetConnectionLost;
+
+        isSubscribed = true;
     }
 
     private void OnDestroy()
@@ -39,13 +48,11 @@ public class AuthManager : MonoBehaviour
 
     private void AuthManager_onInternetConnectionLost()
     {
-        Debug.Log("Internet Check was Lost");
         AdManager.Instance.PleaseCheckInternetConnection.SetActive(true);
     }
 
     private void AuthManager_onInternetConnectionRestored()
     {
-        Debug.Log("Internet Check was Restored");
         AdManager.Instance.PleaseCheckInternetConnection.SetActive(false);
         PlayGamesPlatform.Instance.RequestServerSideAccess(true, Response);
     }
@@ -60,6 +67,7 @@ public class AuthManager : MonoBehaviour
 
     async Task SigninWithGooglePlay()
     {
+        if(AuthenticationService.Instance.IsSignedIn) { return; }
         try
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(token);
@@ -83,13 +91,12 @@ public class AuthManager : MonoBehaviour
     }
     internal void ProcessAuthentication(SignInStatus status)
     {
-        Debug.Log(status);
         if (status == SignInStatus.Success)
         {
-            SaveAndLoadData.LoadFileDatas();
             name = PlayGamesPlatform.Instance.GetUserDisplayName();
             id = PlayGamesPlatform.Instance.GetUserId();
             imageUrl = PlayGamesPlatform.Instance.GetUserImageUrl();
+            DownloadSprite(imageUrl);
             PlayGamesPlatform.Instance.RequestServerSideAccess(true, Response);
         }
         else
@@ -118,10 +125,8 @@ public class AuthManager : MonoBehaviour
             {
                 // Get the texture
                 Texture2D texture = DownloadHandlerTexture.GetContent(www);
-
                 // Create a sprite
                 Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-
                 // You can now use the sprite (for example, assign it to a SpriteRenderer)
                 avatar = sprite;
             }
@@ -129,51 +134,24 @@ public class AuthManager : MonoBehaviour
     }
     void Awake()
     {
-        Debug.Log("Internet Check was Called");
         Instance = this;
+
         PlayGamesPlatform.Activate();
         UnityServices.InitializeAsync();
         InvokeRepeating(nameof(CheckNetwork), 0, 0.15f);
     }
     void CheckNetwork()
     {
-        StartCoroutine(GetRequest("https://google.com"));
-    }
-
-    IEnumerator GetRequest(string uri)
-    {
-        GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
-        // Check if the current selected object is an InputField
-        if (currentSelected != null && currentSelected.GetComponent<TMP_InputField>() == null)
+        if(Application.internetReachability== NetworkReachability.NotReachable)
         {
-            // Suppress the selected UI element only if it's not an input field
-            EventSystem.current.SetSelectedGameObject(null);
+            IsInternetAvailable = false;
         }
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        else
         {
-            yield return webRequest.SendWebRequest();
-
-            switch (webRequest.result)
-            {
-
-                case UnityWebRequest.Result.ConnectionError:
-                    IsInternetAvailable = false;
-                    break;
-
-                case UnityWebRequest.Result.DataProcessingError:
-                    IsInternetAvailable = false;
-                    break;
-
-                case UnityWebRequest.Result.ProtocolError:
-                    IsInternetAvailable = false;
-                    break;
-
-                case UnityWebRequest.Result.Success:
-                    IsInternetAvailable = true;
-                    break;
-            }
+            IsInternetAvailable= true;
         }
     }
+
     private bool isInternetAvailable;
     public event Action onInternetConnectionLost, onInternetConnectionRestored;
     public bool IsInternetAvailable

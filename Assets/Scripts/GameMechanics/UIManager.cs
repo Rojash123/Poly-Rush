@@ -54,7 +54,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject currentMiniPanel, currentInfoPage;
     private void Start()
     {
-        UIManager.Instance.menuScore.text = GameLoadState.highScore.ToString("f2");
+        SaveAndLoadData.LoadFileDatas();
+        menuScore.text = GameLoadState.highScore.ToString("f2");
         avatarImage.sprite = AuthManager.Instance.avatar;
         currentPanel = null;
         CheckPlayerPrefsSound();
@@ -279,7 +280,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowLeaderBoard()
     {
-
+        AuthManager.Instance.ShowLeaderBoard();
     }
     #endregion
     #region HandleSound;
