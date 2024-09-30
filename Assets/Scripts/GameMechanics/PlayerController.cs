@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
         GameLoadState.coinAmt += thisRunCoinValue;
 
         Debug.Log("this is currentscore" + score);
-        Debug.Log("This is highscore" + GameLoadState.highScore)
+        Debug.Log("This is highscore" + GameLoadState.highScore);
         if (score >= GameLoadState.highScore)
         {
             GameLoadState.highScore = score;
