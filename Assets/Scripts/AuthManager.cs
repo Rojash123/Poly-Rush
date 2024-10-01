@@ -96,7 +96,7 @@ public class AuthManager : MonoBehaviour
             name = PlayGamesPlatform.Instance.GetUserDisplayName();
             id = PlayGamesPlatform.Instance.GetUserId();
             imageUrl = PlayGamesPlatform.Instance.GetUserImageUrl();
-            DownloadSprite(imageUrl);
+            StartCoroutine(DownloadSprite(imageUrl));
             PlayGamesPlatform.Instance.RequestServerSideAccess(true, Response);
         }
         else

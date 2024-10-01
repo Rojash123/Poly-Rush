@@ -145,7 +145,7 @@ public class AdManager : MonoBehaviour
     {
         get
         {
-            return interstitialAd != null;
+            return rewardedAd != null;
         }
     }
     public void LoadRewardedAd()
