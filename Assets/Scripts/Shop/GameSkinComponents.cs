@@ -19,10 +19,6 @@ public class GameSkinComponents : MonoBehaviour
     public bool isPurchased;
     public bool isSelected;
 
-    private void Start()
-    {
-    }
-
     public void LockedState()
     {
         Selected.SetActive(false);
@@ -66,19 +62,13 @@ public class GameSkinComponents : MonoBehaviour
             PlayerController.Instance.trailSkin.enabled = false;
         }
     }
-
-    public void SetSkinOfBall()
-    {
-    }
-
     public void SkinBuy()
     {
         if(GameLoadState.coinAmt < SkinValue) 
         {
+            UIManager.Instance.notEnoughCoin.SetActive(true);
             return;
         }
-
-        
         GameLoadState.coinAmt -= SkinValue;
         OnItemPurchasedEvent?.Invoke(SkinIndex);
         skinStatus.text = "Equip";
