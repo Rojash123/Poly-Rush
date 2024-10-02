@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
     {
         SoundManager.Instance.UIClickSound();
         loadingPanel.SetActive(true);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
     public void OpenPanel(GameObject temp)
     {
