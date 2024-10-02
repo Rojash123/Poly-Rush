@@ -190,15 +190,9 @@ public class AdManager : MonoBehaviour
             });
         }
     }
-    public GameObject loadingAd, PleaseCheckInternetConnection;
+    public GameObject PleaseCheckInternetConnection,adNotAvailable;
     public void ShowRewardedAdLevelUnlock()
     {
-        while (!rewardedAd.CanShowAd())
-        {
-            loadingAd.SetActive(true);
-        }
-        loadingAd.SetActive(false);
-
         if (rewardedAd != null && rewardedAd.CanShowAd())
         {
             rewardedAd.Show((Reward reward) =>
@@ -210,6 +204,7 @@ public class AdManager : MonoBehaviour
         }
         else
         {
+            adNotAvailable.SetActive(true);
             return;
         }
     }
@@ -223,6 +218,10 @@ public class AdManager : MonoBehaviour
                 GameLoadState.coinAmt += 50;
                 SaveAndLoadData.SaveData();
             });
+        }
+        else
+        {
+            adNotAvailable.SetActive(true);
         }
     }
 

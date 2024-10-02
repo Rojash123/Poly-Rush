@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,16 +8,16 @@ public class GameLoadingFirst : MonoBehaviour
 {
     [SerializeField] Slider loadingSlider;
     int sliderValue;
-
-    [SerializeField] GameObject loadingPanel,gameLoading,selectLevelScreen;
-
+    [SerializeField] GameObject loadingPanel, gameLoading, selectLevelScreen, signInObject;
     [SerializeField] GameObject normalRush, neonRush, neonRushLock;
-
     [SerializeField] TextMeshProUGUI dynamicText;
-
-    private const string adCount="AdWatchLeft";
-
+    private const string adCount = "AdWatchLeft";
     private static GameLoadingFirst instance;
+
+    public Sprite[] gameloadingScreen;
+    public Image loadingScreen;
+
+    public Button neonLevel;
     public static GameLoadingFirst Instance { get { return instance; } }
 
     private void Awake()
@@ -29,6 +27,7 @@ public class GameLoadingFirst : MonoBehaviour
 
     void Start()
     {
+        StopAllCoroutines();
         if (!PlayerPrefs.HasKey(adCount))
         {
             PlayerPrefs.SetInt(adCount, 3);
@@ -38,7 +37,7 @@ public class GameLoadingFirst : MonoBehaviour
             SetDynamicText();
         }
         sliderValue = 0;
-        if(!(Application.internetReachability == NetworkReachability.NotReachable))
+        if (!(Application.internetReachability == NetworkReachability.NotReachable))
         {
             StartCoroutine(LoadSceneSlider());
         }
@@ -50,14 +49,17 @@ public class GameLoadingFirst : MonoBehaviour
     public void SetDynamicText()
     {
         dynamicText.text = "Watch " + PlayerPrefs.GetInt(adCount) + " Ads to unlock";
-        if(PlayerPrefs.GetInt(adCount) <= 0) 
+        if (PlayerPrefs.GetInt(adCount) <= 0)
         {
+            neonLevel.interactable = true;
             neonRushLock.SetActive(false);
         }
     }
     IEnumerator LoadSceneSlider()
     {
-        Debug.Log("Hello");
+        yield return new WaitUntil(() => AuthManager.Instance.IsSignedIn);
+        signInObject.SetActive(false);
+
         while (sliderValue < 100)
         {
             sliderValue++;
@@ -68,22 +70,17 @@ public class GameLoadingFirst : MonoBehaviour
         {
             AuthManager.Instance.SubScribeEvents();
         }
+
         selectLevelScreen.SetActive(true);
         loadingPanel.SetActive(false);
     }
 
-    public void ChangLevel(GameObject gameobject)
-    {
-        normalRush.SetActive(false);
-        neonRush.SetActive(false);
-        gameobject.SetActive(true);
-    }
-
     public void LoadGame(int index)
     {
+        loadingScreen.sprite = gameloadingScreen[index - 1];
         GameLoadState.loadedFromStart = true;
         gameLoading.SetActive(true);
-        SceneManager.LoadScene(index);
+        SceneManager.LoadScene(index+1);
     }
 
 

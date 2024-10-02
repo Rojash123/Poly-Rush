@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     }
 
     public TextMeshProUGUI score, thisCoinAmount, menuScore, menuCoin, gameOverCoin, gameOverScore, countDownText,highScoreText;
-    public GameObject mainMenuPanel, overLayPanel, loadingPanel, countDownPanel;
+    public GameObject mainMenuPanel, overLayPanel, loadingPanel, countDownPanel,notEnoughCoin;
 
     public Image avatarImage;
     public TextMeshProUGUI userName,scoreAvatar;
@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour
         SoundManager.Instance.UIClickSound();
         GameLoadState.loadedFromStart = true;
         AdManager.Instance.ShowAdOnAppropriateCondition();
-        SceneManager.LoadScene(sceneIndex);
+        SceneManager.LoadScene(sceneIndex + 1);
         Time.timeScale = 1;
     }
 
@@ -256,7 +256,7 @@ public class UIManager : MonoBehaviour
         SoundManager.Instance.UIClickSound();
         GameLoadState.loadedFromStart = false;
         AdManager.Instance.ShowAdOnAppropriateCondition();
-        SceneManager.LoadScene(sceneIndex);
+        SceneManager.LoadScene(sceneIndex+1);
     }
     private void OnApplicationFocus(bool focus)
     {

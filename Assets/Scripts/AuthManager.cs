@@ -10,10 +10,8 @@ using System.Collections;
 
 public class AuthManager : MonoBehaviour
 {
-    bool isSignedIn;
-
     public bool isSubscribed;
-    public bool IsSignedIn { get { return isSignedIn; } }
+    public bool IsSignedIn;
     public static AuthManager Instance;
     public string name, id, imageUrl;
     public Sprite avatar;
@@ -74,15 +72,15 @@ public class AuthManager : MonoBehaviour
         }
         catch (AuthenticationException ex)
         {
-            isSignedIn = false;
+            IsSignedIn = false;
             Debug.LogException(ex);
         }
         catch (RequestFailedException ex)
         {
-            isSignedIn = false;
+            IsSignedIn = false;
             Debug.LogException(ex);
         }
-        isSignedIn = true;
+        IsSignedIn = true;
     }
 
     public void SignInGooglePlay()
@@ -101,7 +99,7 @@ public class AuthManager : MonoBehaviour
         }
         else
         {
-            isSignedIn = false;
+            IsSignedIn = false;
         }
     }
 
