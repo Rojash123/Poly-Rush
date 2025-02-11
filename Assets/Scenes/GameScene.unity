@@ -19803,9 +19803,24 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3703473662790502100, guid: e75dc38b580c72c4181165ac3cf152ee,
         type: 3}
+      propertyPath: canMove
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703473662790502100, guid: e75dc38b580c72c4181165ac3cf152ee,
+        type: 3}
+      propertyPath: canSwipe
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703473662790502100, guid: e75dc38b580c72c4181165ac3cf152ee,
+        type: 3}
       propertyPath: explosion
       value: 
       objectReference: {fileID: 1406146488}
+    - target: {fileID: 3703473662790502100, guid: e75dc38b580c72c4181165ac3cf152ee,
+        type: 3}
+      propertyPath: canSpawnCoin
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4158232536259302170, guid: e75dc38b580c72c4181165ac3cf152ee,
         type: 3}
       propertyPath: m_LocalPosition.x
