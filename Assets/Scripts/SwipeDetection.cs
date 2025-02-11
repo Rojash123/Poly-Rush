@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class SwipeDetection : MonoBehaviour
 {
@@ -26,21 +27,22 @@ public class SwipeDetection : MonoBehaviour
     {
         PlayerController.Instance.onStartEvent += SwipeStart;
         PlayerController.Instance.onEndEvent += SwipeEnd;
+        PlayerController.Instance.CancelledEvent += SwipeEventEnd;
     }
-
-    private void SwipeStart(Vector2 pos)
+    void SwipeEventEnd()
     {
         startPosSet = false;
+        startPosition = Vector2.zero;
+        endPosition = Vector2.zero;
+    }
+    private void SwipeStart(Vector2 pos)
+    {
+        startPosSet = true;
+        startPosition = pos;
     }
 
     private void SwipeEnd(Vector2 pos)
     {
-        
-        if (!startPosSet)
-        {
-            startPosSet = true;
-            startPosition = pos;
-        }
         if(startPosSet && !PlayerController.Instance.isSwipePerformed)
         {
             endPosition = pos;
@@ -61,7 +63,8 @@ public class SwipeDetection : MonoBehaviour
                 Vector3 direction = endPosition - startPosition;
                 Vector2 direction2D = new Vector2(direction.x, direction.y).normalized;
                 SwipeDirection(direction2D);
-                startPosition=Vector2.zero;endPosition=Vector2.zero;
+                startPosition=Vector2.zero;
+                endPosition=Vector2.zero;
             }
         }
     }
@@ -76,7 +79,6 @@ public class SwipeDetection : MonoBehaviour
         if (Vector2.Dot(Vector2.up, direction) > directionThreshold)
         {
             PlayerController.Instance.Jump();
-
         }
         else if (Vector2.Dot(Vector2.down, direction) > directionThreshold)
         {
@@ -87,7 +89,6 @@ public class SwipeDetection : MonoBehaviour
         else if (Vector2.Dot(Vector2.left, direction) > directionThreshold)
         {
             if (platformCount == 0) return;
-
             SoundManager.Instance.swipeSideWaysSound();
             platformCount--;
             rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)+new Vector3(0,0,10), lerpDuration);
@@ -96,7 +97,6 @@ public class SwipeDetection : MonoBehaviour
         {
             if (platformCount == 2) return;
             SoundManager.Instance.swipeSideWaysSound();
-
             platformCount++;
             rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)+new Vector3(0,0,10), lerpDuration);
         }

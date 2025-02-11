@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public delegate void StartTouch(Vector2 pos);
     public event StartTouch onStartEvent;
     public delegate void EndTouch(Vector2 pos);
+
+    public Action CancelledEvent;
     public event EndTouch onEndEvent;
     public float playerSpeed;
     public bool canMove, isInvincible, canSpawnCoin;
@@ -160,6 +163,7 @@ public class PlayerController : MonoBehaviour
         if (!isSwipeAllowed) return;
         isSwipePerformed = false;
         canSwipe = false;
+        CancelledEvent?.Invoke();
     }
 
     private void CheckSwipeInput(InputAction.CallbackContext ctx)
