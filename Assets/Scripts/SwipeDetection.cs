@@ -31,8 +31,6 @@ public class SwipeDetection : MonoBehaviour
     void SwipeEventEnd()
     {
         startPosSet = false;
-        startPosition = Vector2.zero;
-        endPosition = Vector2.zero;
     }
     private void SwipeStart(Vector2 pos)
     {
@@ -45,13 +43,9 @@ public class SwipeDetection : MonoBehaviour
         if(startPosSet && !PlayerController.Instance.isSwipePerformed)
         {
             endPosition = pos;
+            SwipeMovement();
         }
     }
-    private void Update()
-    {
-        SwipeMovement();
-    }
-
     void SwipeMovement()
     {
         if(PlayerController.Instance.canSwipe && !PlayerController.Instance.isSwipePerformed)
@@ -62,8 +56,6 @@ public class SwipeDetection : MonoBehaviour
                 Vector3 direction = endPosition - startPosition;
                 Vector2 direction2D = new Vector2(direction.x, direction.y).normalized;
                 SwipeDirection(direction2D);
-                startPosition=Vector2.zero;
-                endPosition=Vector2.zero;
             }
         }
     }
@@ -90,14 +82,14 @@ public class SwipeDetection : MonoBehaviour
             if (platformCount == 0) return;
             SoundManager.Instance.swipeSideWaysSound();
             platformCount--;
-            rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)+new Vector3(0,0,10), lerpDuration);
+            rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)/*+new Vector3(0,0,10)*/, lerpDuration);
         }
         else if (Vector2.Dot(Vector2.right, direction) > directionThreshold)
         {
             if (platformCount == 2) return;
             SoundManager.Instance.swipeSideWaysSound();
             platformCount++;
-            rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)+new Vector3(0,0,10), lerpDuration);
+            rb.position = Vector3.Lerp(rb.position, MoveCharacter(platformCount)/*+new Vector3(0,0,10)*/, lerpDuration);
         }
     }
     private Vector3 MoveCharacter(int count)

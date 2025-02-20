@@ -293,8 +293,6 @@ public class UIManager : MonoBehaviour
         if (!PlayerPrefs.HasKey(canPlaySoundPrefs) || !PlayerPrefs.HasKey(canVibratePrefs))
         {
             PlayerPrefs.SetInt(canPlaySoundPrefs, 1);
-            PlayerPrefs.SetInt(canVibratePrefs, 1);
-            canVibrate = true;
         }
         else
         {
@@ -306,20 +304,12 @@ public class UIManager : MonoBehaviour
             {
                 TurnOnSound();
             }
-            if (PlayerPrefs.GetInt(canVibratePrefs) == 0)
-            {
-                TurnOffVibration();
-            }
-            else
-            {
-                TurnOnVibration();
-            }
+           
         }
 
     }
 
-    private bool canVibrate;
-    [SerializeField] GameObject sounOffButton, vibtrateOffButton;
+    [SerializeField] GameObject sounOffButton;
 
     public void TurnOnSound()
     {
@@ -333,19 +323,5 @@ public class UIManager : MonoBehaviour
         AudioListener.volume = PlayerPrefs.GetInt(canPlaySoundPrefs);
         sounOffButton.SetActive(true);
     }
-    public void TurnOnVibration()
-    {
-        PlayerPrefs.SetInt(canVibratePrefs, 1);
-        canVibrate = true;
-        vibtrateOffButton.SetActive(false);
-    }
-    public void TurnOffVibration()
-    {
-        PlayerPrefs.SetInt(canVibratePrefs, 0);
-        canVibrate = false;
-        vibtrateOffButton.SetActive(true);
-
-    }
-
     #endregion;
 }
