@@ -16,19 +16,35 @@ public class AuthManager : MonoBehaviour
     public string name, id, imageUrl;
     public Sprite avatar;
 
+    public enum loginType
+    {
+        requireAuth,
+        donotrequireAuth
+    }
+    public loginType loginMode;
+    
+
     private string token;
 
     void Start()
     {
-        isInternetAvailable = !(Application.internetReachability == NetworkReachability.NotReachable);
-        if (isInternetAvailable)
+        if(loginMode == loginType.requireAuth)
         {
-            SignInGooglePlay();
+            isInternetAvailable = !(Application.internetReachability == NetworkReachability.NotReachable);
+            if (isInternetAvailable)
+            {
+                SignInGooglePlay();
+            }
+            else
+            {
+                AuthManager_onInternetConnectionLost();
+            }
         }
         else
         {
-            AuthManager_onInternetConnectionLost();
+            IsSignedIn = true;
         }
+       
     }
     public void SubScribeEvents()
     {
