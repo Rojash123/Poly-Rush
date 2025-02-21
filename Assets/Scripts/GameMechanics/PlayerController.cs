@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask layerMask;
     [SerializeField] float groundCheckOffset;
 
-    private PlayerMovement playerMovement;
+    [SerializeField] private InputActionAsset swipeInputActions;
+    //private PlayerMovement playerMovement;
     public delegate void StartTouch(Vector2 pos);
     public event StartTouch onStartEvent;
     public delegate void EndTouch(Vector2 pos);
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
         }
-        playerMovement = new PlayerMovement();
+        //playerMovement = new PlayerMovement();
         canMove = false;
         playerObject = transform.GetChild(0);
     }
@@ -84,20 +85,25 @@ public class PlayerController : MonoBehaviour
                 worldMat.SetFloat("_sidewaysStrength", -0.0007f);
             }
         }
-        playerMovement.Touch.PrimaryContact.started += ctx => StartTouchPrimary(ctx);
-        playerMovement.Touch.PrimaryPosition.performed += ctx => CheckSwipeInput(ctx);
-        playerMovement.Touch.PrimaryContact.canceled += ctx => CancelInput(ctx);
+        swipeInputActions.FindAction("PrimaryContact").started += StartTouchPrimary;
+        swipeInputActions.FindAction("PrimaryContact").canceled += CheckSwipeInput;
+
+        //playerMovement.Touch.PrimaryContact.started += ctx => StartTouchPrimary(ctx);
+        //playerMovement.Touch.PrimaryPosition.performed += ctx => CheckSwipeInput(ctx);
+        //playerMovement.Touch.PrimaryContact.canceled += ctx => CancelInput(ctx);
 
     }
     private void OnEnable()
     {
         LevelGenerator.coinConsumedEvent += OnCoinConsumed;
-        playerMovement.Enable();
+        //playerMovement.Enable();
+        swipeInputActions.Enable();
     }
     private void OnDisable()
     {
         LevelGenerator.coinConsumedEvent -= OnCoinConsumed;
-        playerMovement.Disable();
+        //playerMovement.Disable();
+        swipeInputActions.Disable();
     }
 
     public void ActivateShield()
@@ -169,14 +175,18 @@ public class PlayerController : MonoBehaviour
     private void CheckSwipeInput(InputAction.CallbackContext ctx)
     {
         if (!isSwipeAllowed) return;
-        if (onEndEvent != null) onEndEvent(playerMovement.Touch.PrimaryPosition.ReadValue<Vector2>());
+
+        if (onEndEvent != null) onEndEvent(swipeInputActions.FindAction("PrimaryPosition").ReadValue<Vector2>());
+        //if (onEndEvent != null) onEndEvent(playerMovement.Touch.PrimaryPosition.ReadValue<Vector2>());
     }
     private void StartTouchPrimary(InputAction.CallbackContext ctx)
     {
         if (!isSwipeAllowed) return;
         isSwipePerformed = false;
         canSwipe = true;
-        if (onStartEvent != null) onStartEvent(playerMovement.Touch.PrimaryPosition.ReadValue<Vector2>());
+        if (onStartEvent != null) onStartEvent(swipeInputActions.FindAction("PrimaryPosition").ReadValue<Vector2>());
+
+        //if (onStartEvent != null) onStartEvent(playerMovement.Touch.PrimaryPosition.ReadValue<Vector2>());
     }
 
     private void FixedUpdate()

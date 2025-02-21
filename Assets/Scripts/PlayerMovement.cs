@@ -29,7 +29,7 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""PrimaryContact"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""69fda4e6-df52-4869-92af-eae77acd9a61"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -38,19 +38,19 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""PrimaryPosition"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""5f70785b-fed5-4464-99e9-1aeb01ef6be6"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""fb5967a7-2f4e-47a3-9600-1f863a45758f"",
-                    ""path"": ""<Touchscreen>/primaryTouch/press"",
+                    ""path"": ""<Touchscreen>/Press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -61,7 +61,7 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""47da8ef4-9150-4886-a3e0-7ede656c81af"",
-                    ""path"": ""<Touchscreen>/primaryTouch/position"",
+                    ""path"": ""<Touchscreen>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
