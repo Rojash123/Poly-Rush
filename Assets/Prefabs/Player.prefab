@@ -610,6 +610,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheckOffset: 1.11
+  swipeInputActions: {fileID: -944628639613478452, guid: 61775ab36416e7642a1458a3d1c88571,
+    type: 3}
   playerSpeed: 30
   canMove: 0
   isInvincible: 0

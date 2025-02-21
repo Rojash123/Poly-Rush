@@ -26,7 +26,7 @@ public class SwipeDetection : MonoBehaviour
     {
         PlayerController.Instance.onStartEvent += SwipeStart;
         PlayerController.Instance.onEndEvent += SwipeEnd;
-        PlayerController.Instance.CancelledEvent += SwipeEventEnd;
+        //PlayerController.Instance.CancelledEvent += SwipeEventEnd;
     }
     void SwipeEventEnd()
     {
@@ -34,12 +34,15 @@ public class SwipeDetection : MonoBehaviour
     }
     private void SwipeStart(Vector2 pos)
     {
+        Debug.Log( pos);
+
         startPosSet = true;
         startPosition = pos;
     }
 
     private void SwipeEnd(Vector2 pos)
     {
+        Debug.Log(pos);
         if(startPosSet && !PlayerController.Instance.isSwipePerformed)
         {
             endPosition = pos;

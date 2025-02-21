@@ -573,7 +573,7 @@ PrefabInstance:
     - target: {fileID: 2858676711016465548, guid: f2bf85570a926d74bbd51d05d3e8027e,
         type: 3}
       propertyPath: loginMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3093360068156040775, guid: f2bf85570a926d74bbd51d05d3e8027e,
         type: 3}
