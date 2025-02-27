@@ -58,6 +58,6 @@ Material:
     - _BackWardStrength: -0.0003
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _sidewaysStrength: -0.0007
+    - _sidewaysStrength: 0.00070000003
     m_Colors: []
   m_BuildTextureStacks: []

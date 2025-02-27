@@ -604,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0c2f5b604b3d8548a9d11aea13932c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpHeight: 20
+  jumpHeight: 26.5
   downPower: 100
   layerMask:
     serializedVersion: 2
@@ -633,6 +633,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 65137a5aac114a34281b2a66c181b99e, type: 2}
   - {fileID: 2100000, guid: d3d0d87c241baac4a81d64afc101fe88, type: 2}
   - {fileID: 2100000, guid: b16e0fa92d315b2449f2bca00f8befcc, type: 2}
+  - {fileID: 2100000, guid: 2e126e9be7fc7d04d92884f5ba616a28, type: 2}
+  - {fileID: 2100000, guid: 3b771a9ccbfb7c340bb33ad195b958c8, type: 2}
+  - {fileID: 2100000, guid: 4a37a4a4331d7dd48a97b537eda8c0be, type: 2}
+  - {fileID: 2100000, guid: cb0c639780eed0242b8ee8bae995ec1b, type: 2}
+  - {fileID: 2100000, guid: b068e0a94c9e2074c8f33c73a788d5ce, type: 2}
+  - {fileID: -876546973899608171, guid: 12982a215256444429364bf8a07f200a, type: 3}
   levelType: 0
   ballSkin: {fileID: 5505518124664064646}
   trailSkin: {fileID: 5083019845753800591}

@@ -198,11 +198,11 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-            gravityScale = 5f;
+            gravityScale = 9.8f;
         }
         else
         {
-            gravityScale = 3f;
+            gravityScale = 5f;
         }
         Vector3 gravity = globalGravity * gravityScale * Vector3.up;
         rb.AddForce(gravity, ForceMode.Acceleration);
@@ -252,7 +252,7 @@ public class PlayerController : MonoBehaviour
         {
             while (currentValue < val)
             {
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
                 currentValue += 0.0001f;
                 Debug.Log(currentValue);
                 foreach (var item in otherMat)
@@ -269,7 +269,7 @@ public class PlayerController : MonoBehaviour
         {
             while (currentValue > val)
             {
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
                 currentValue -= 0.0001f;
                 Debug.Log(currentValue);
                 foreach (var item in otherMat)
