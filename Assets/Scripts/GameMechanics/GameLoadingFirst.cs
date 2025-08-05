@@ -48,7 +48,7 @@ public class GameLoadingFirst : MonoBehaviour
     }
     public void SetDynamicText()
     {
-        dynamicText.text = "Watch " + PlayerPrefs.GetInt(adCount) + " Ads to unlock";
+        dynamicText.text = "Watch " + PlayerPrefs.GetInt(adCount) + " Ads to unlock Level";
         if (PlayerPrefs.GetInt(adCount) <= 0)
         {
             neonLevel.interactable = true;
@@ -82,8 +82,6 @@ public class GameLoadingFirst : MonoBehaviour
         gameLoading.SetActive(true);
         SceneManager.LoadScene(index+1);
     }
-
-
     public void ShowAdlevelUnlock()
     {
         AdManager.Instance.ShowRewardedAdLevelUnlock();

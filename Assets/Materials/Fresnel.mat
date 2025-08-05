@@ -53,7 +53,7 @@ Material:
     m_Floats:
     - _Factor: 0.24
     - _Fresne: 0
-    - _Fwd: 0.00070000003
+    - _Fwd: -0.0007
     - _QueueControl: 0
     - _QueueOffset: 0
     - _sidewa: -0.0003

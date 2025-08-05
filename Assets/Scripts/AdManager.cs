@@ -1,12 +1,5 @@
 using GoogleMobileAds.Api;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class AdManager : MonoBehaviour
 {
@@ -28,8 +21,8 @@ public class AdManager : MonoBehaviour
 
 
 #if UNITY_ANDROID
-    string interstitialId = "ca-app-pub-7231474520345903/8685200109";
-    string rewardedId = "ca-app-pub-7231474520345903/8663452136";
+    string interstitialId = "ca-app-pub-3940256099942544/1033173712";
+    string rewardedId = "ca-app-pub-3940256099942544/5224354917";
 
 #elif UNITY_IPHONE
     string appOpenId ="";
@@ -215,7 +208,7 @@ public class AdManager : MonoBehaviour
         {
             rewardedAd.Show((Reward reward) =>
             {
-                GameLoadState.coinAmt += 50;
+                GameLoadState.coinAmt += 100;
                 SaveAndLoadData.SaveData();
             });
         }
